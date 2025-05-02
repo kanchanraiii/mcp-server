@@ -10,10 +10,9 @@ AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT")
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-
-endpoint = "AZURE_OPENAI_ENDPOINT"
+endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+subscription_key = os.getenv("API_KEY")
 api_version = "2024-12-01-preview"
-subscription_key = "API_KEY"
 DEPLOYMENT_NAME = "gpt-4o"
 
 client = AzureOpenAI(
