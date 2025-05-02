@@ -4,24 +4,28 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 import os
 from flask_cors import CORS
+import traceback
+
+# Load environment variables
 load_dotenv()
 API_KEY = os.getenv("API_KEY")
-AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+
+# Flask app setup
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
-endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-subscription_key = os.getenv("API_KEY")
+# Azure OpenAI client setup
 api_version = "2024-12-01-preview"
 DEPLOYMENT_NAME = "gpt-4o"
 
 client = AzureOpenAI(
     api_version=api_version,
-    azure_endpoint=endpoint,
-    api_key=subscription_key
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_key=API_KEY
 )
 
-
+# Build prompt for advice
 def build_mcp_prompt(data, season):
     return {
         "version": "1.0",
@@ -41,7 +45,7 @@ def build_mcp_prompt(data, season):
         }
     }
 
-# Generate farming advice
+# Generate farming advice using GPT
 def generate_farming_advice(mcp_prompt):
     system_prompt = (
         "You are an agriculture expert and advisor. Your task is to provide simple, friendly, and easy-to-understand advice "
@@ -67,8 +71,9 @@ def index():
 @app.route('/generate-advice', methods=['POST'])
 def get_advice():
     data = request.json
-
     try:
+        print("Received data:", data)
+
         month = int(data['month'])
         if month in [6, 7, 8, 9]:
             season = "Kharif"
@@ -83,8 +88,9 @@ def get_advice():
         return jsonify({"farming_advice": advice})
 
     except Exception as e:
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-# === Run Flask App ===
+# Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
