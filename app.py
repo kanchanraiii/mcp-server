@@ -1,12 +1,16 @@
 import json
 from flask import Flask, request, jsonify
 from openai import AzureOpenAI
+from dotenv import load_dotenv
+import os
 from flask_cors import CORS
-
-
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
+AZURE_OPENAI_ENDPOINT=os.getenv("AZURE_OPENAI_ENDPOINT")
 app = Flask(__name__)
-CORS(app)
-# Azure OpenAI Configuration
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+
 endpoint = "AZURE_OPENAI_ENDPOINT"
 api_version = "2024-12-01-preview"
 subscription_key = "API_KEY"
@@ -18,7 +22,7 @@ client = AzureOpenAI(
     api_key=subscription_key
 )
 
-# Build MCP prompt
+
 def build_mcp_prompt(data, season):
     return {
         "version": "1.0",
@@ -57,7 +61,7 @@ def generate_farming_advice(mcp_prompt):
     )
     return response.choices[0].message.content
 
-# === API Route ===
+
 @app.route('/generate-advice', methods=['POST'])
 def get_advice():
     data = request.json
