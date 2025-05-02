@@ -1,12 +1,15 @@
 import json
 from flask import Flask, request, jsonify
 from openai import AzureOpenAI
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 # Azure OpenAI Configuration
-endpoint = "https://rajat-ma48g9h2-japaneast.cognitiveservices.azure.com/"
+endpoint = "AZURE_OPENAI_ENDPOINT"
 api_version = "2024-12-01-preview"
-subscription_key = "9vEQoUBjg5Vr1SBSRDPU2HMcbq3EAjTbnMemi8IxtW2sP3ljy7rUJQQJ99BDACi0881XJ3w3AAAAACOG03WS"
+subscription_key = "API_KEY"
 DEPLOYMENT_NAME = "gpt-4o"
 
 client = AzureOpenAI(
