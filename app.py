@@ -13,7 +13,7 @@ AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 
 # Flask app setup
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Azure OpenAI client setup
 api_version = "2024-12-01-preview"
