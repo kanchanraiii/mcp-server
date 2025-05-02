@@ -90,7 +90,24 @@ def get_advice():
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e)}), 500
+@app.route('/chatbot', methods=['POST'])
+def ask_question():
+    data = request.json
+    try:
+        language = data.get("language", "English")
+        user_question = data.get("question", "")
+        
+        if not user_question:
+            return jsonify({"error": "No question provided."}), 400
 
+        chat_prompt = build_chat_prompt(language, user_question)
+        response = generate_chat_response(chat_prompt)
+
+        return jsonify({"response": response})
+
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e)}), 500
 # Run the Flask app
 if __name__ == '__main__':
     app.run(debug=True)
