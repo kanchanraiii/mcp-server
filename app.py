@@ -116,10 +116,7 @@ def generate_chat_response(messages):
     )
     return response.choices[0].message.content
 
-# Home route
-@app.route('/')
-def index():
-    return jsonify({"message": "MCP Server is running!"})
+
 
 # Chatbot route
 @app.route('/chatbot', methods=['POST'])
