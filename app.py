@@ -61,6 +61,9 @@ def generate_farming_advice(mcp_prompt):
     )
     return response.choices[0].message.content
 
+@app.route('/')
+def index():
+    return jsonify({"message": "MCP Server is running!"})
 
 @app.route('/generate-advice', methods=['POST'])
 def get_advice():
